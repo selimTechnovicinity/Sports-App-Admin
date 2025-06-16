@@ -51,7 +51,7 @@ export default function UserProfilePage() {
       reset(response.data.data);
       // setSelectedImage(response.data.data.image);
     } catch (error) {
-      toast.error("Failed to fetch user data");
+      toast.error(error as string | "Failed to fetch user data");
     } finally {
       setIsLoading(false);
     }
@@ -79,7 +79,7 @@ export default function UserProfilePage() {
       setIsEditing(false);
       toast.success("Profile updated successfully");
     } catch (error) {
-      toast.error("Failed to update profile");
+      toast.error(error as string | "Failed to update profile");
     }
   };
 

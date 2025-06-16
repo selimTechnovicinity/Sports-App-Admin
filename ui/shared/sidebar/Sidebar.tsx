@@ -6,13 +6,13 @@ import { useEffect, useState } from "react";
 import { BiSolidDashboard } from "react-icons/bi";
 import { CiTextAlignJustify } from "react-icons/ci";
 import { FaClipboardQuestion } from "react-icons/fa6";
-import { FiMenu, FiUser } from "react-icons/fi";
+import { FiMenu } from "react-icons/fi";
 import { GiPlayerNext } from "react-icons/gi";
+import { GrGroup } from "react-icons/gr";
 import { IoSettings } from "react-icons/io5";
 import { MdPrivacyTip, MdSportsBasketball } from "react-icons/md";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { SiNintendogamecube } from "react-icons/si";
-import { GrGroup } from "react-icons/gr";
 import { TbEdit } from "react-icons/tb";
 import { toast } from "sonner";
 
@@ -139,12 +139,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                     : "hover:bg-blue-700"
                 }`}
               >
-                <GrGroup size={20}/>
+                <GrGroup size={20} />
                 <span>Team Types</span>
               </Link>
             </li>
 
-            <li>
+            {/* <li>
               <Link
                 href="/users"
                 className={`flex items-center gap-3 p-2 rounded ${
@@ -158,7 +158,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                 <FiUser size={20} />
                 <span>Users</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 href="/admin-profile"

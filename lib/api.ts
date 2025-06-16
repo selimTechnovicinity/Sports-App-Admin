@@ -1,10 +1,8 @@
 import { TResetPasswordData } from "@/app/(auth)/forgot-password/verify/reset-password/page";
-import { TUpdateData } from "@/app/(withCommonLayout)/admin-profile/page";
 import { FAQData } from "@/app/(withCommonLayout)/faq/create/page";
 import { UpdateFAQData } from "@/app/(withCommonLayout)/faq/edit/[id]/page";
 import { PrivacyData } from "@/app/(withCommonLayout)/privacy/page";
 import { TUpdatePasswordData } from "@/app/(withCommonLayout)/update-password/page";
-import { TRegisterData } from "@/app/(withCommonLayout)/users/create/page";
 import API from "./axios-client";
 
 type forgotPasswordType = { email: string };
@@ -45,13 +43,13 @@ export const logoutMutationFn = async () => await API.post(`/auths/logout`);
 
 export const getSongFormats = async () => await API.get("/song_formats");
 
-export const updateUser = async (formData: TUpdateData) => {
-  const res = await API.post(`/users/user`, formData);
+// export const updateUser = async (formData: TUpdateData) => {
+//   const res = await API.post(`/users/user`, formData);
 
-  const userInfo = await res.data;
+//   const userInfo = await res.data;
 
-  return userInfo;
-};
+//   return userInfo;
+// };
 export const updatePassword = async (formData: TUpdatePasswordData) => {
   const res = await API.patch(`/auth/change-password`, formData);
   const result = await res.data;
@@ -94,17 +92,12 @@ export const disableUser = async (id: { id: string }) => {
   return userInfo;
 };
 
-export const userRegister = async (formData: TRegisterData) => {
-  const res = await API.post(`/auth/register`, formData);
-  const userInfo = await res.data;
-  return userInfo;
-};
 
-export const updateUserById = async (id: string, formData: TUpdateData) => {
-  const res = await API.post(`/users/admin/${id}`, formData);
-  const result = await res.data;
-  return result;
-};
+// export const updateUserById = async (id: string, formData: TUpdateData) => {
+//   const res = await API.post(`/users/admin/${id}`, formData);
+//   const result = await res.data;
+//   return result;
+// };
 
 export const createPrivacy = async (privacyData: PrivacyData) => {
   const res = await API.post(`/additonals/privacy_policy`, privacyData);
