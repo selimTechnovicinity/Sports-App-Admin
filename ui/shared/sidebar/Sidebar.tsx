@@ -11,7 +11,7 @@ import { GiPlayerNext } from "react-icons/gi";
 import { GrGroup } from "react-icons/gr";
 import { IoSettings } from "react-icons/io5";
 import { MdPrivacyTip, MdSportsBasketball } from "react-icons/md";
-import { RiLogoutBoxRLine } from "react-icons/ri";
+import { RiLogoutBoxRLine, RiUserSettingsLine } from "react-icons/ri";
 import { SiNintendogamecube } from "react-icons/si";
 import { TbEdit } from "react-icons/tb";
 import { toast } from "sonner";
@@ -85,6 +85,21 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             </li>
             <li>
               <Link
+                href="/users"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/users") ||
+                  isActive("/users/") ||
+                  pathname.startsWith("/users")
+                    ? "bg-blue-700"
+                    : "hover:bg-blue-700"
+                }`}
+              >
+                <RiUserSettingsLine size={20} />
+                <span>Users</span>
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/season-types"
                 className={`flex items-center gap-3 p-2 rounded ${
                   isActive("/season-types") ||
@@ -141,6 +156,36 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
               >
                 <GrGroup size={20} />
                 <span>Team Types</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/teams"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/teams") ||
+                  isActive("/teams/") ||
+                  pathname.startsWith("/teams")
+                    ? "bg-blue-700"
+                    : "hover:bg-blue-700"
+                }`}
+              >
+                <GrGroup size={20} />
+                <span>Teams</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/events"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/events") ||
+                  isActive("/events/") ||
+                  pathname.startsWith("/events")
+                    ? "bg-blue-700"
+                    : "hover:bg-blue-700"
+                }`}
+              >
+                <GrGroup size={20} />
+                <span>Events</span>
               </Link>
             </li>
 
