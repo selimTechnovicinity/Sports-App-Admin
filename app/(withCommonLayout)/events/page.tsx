@@ -5,7 +5,6 @@ import Modal from "@/components/Modal";
 import API from "@/lib/axios-client";
 import dayjs from "dayjs";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { dayjsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -68,13 +67,11 @@ interface Pagination {
 }
 
 export default function EventsPage() {
-  const router = useRouter();
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [view, setView] = useState<"list" | "calendar">("list");
   const [pagination, setPagination] = useState<Pagination>({
     totalItems: 0,
     totalPages: 1,
@@ -182,9 +179,8 @@ export default function EventsPage() {
       };
 
       if (isEditing && selectedEvent) {
-        await API.post(`/events/${selectedEvent._id}`, formattedData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        console.log(formattedData);
+        await API.post(`/events/${selectedEvent._id}`, formattedData);
         toast.success("Event updated successfully");
       } else {
         await API.post("/events", formattedData, {
@@ -238,20 +234,6 @@ export default function EventsPage() {
     </div>
   );
 
-  // Calendar view functions
-  const calendarEvents = events.map((event) => ({
-    id: event._id,
-    title: `${event.team_id.team_name} vs ${
-      event.opponent_team_id?.team_name || "TBD"
-    }`,
-    start: new Date(event.start_date),
-    end: new Date(
-      new Date(event.start_date).getTime() + event.duration * 60000
-    ),
-    allDay: event.all_day,
-    resource: event,
-  }));
-
   const handleSelectEvent = (event: any) => {
     fetchEventDetails(event.resource._id);
   };
@@ -265,28 +247,6 @@ export default function EventsPage() {
             Events Management
           </h1>
           <div className="flex gap-4">
-            <div className="flex bg-white rounded-lg shadow-sm border border-gray-200">
-              <button
-                onClick={() => setView("list")}
-                className={`px-4 py-2 ${
-                  view === "list"
-                    ? "bg-blue-100 text-blue-600"
-                    : "text-gray-600"
-                }`}
-              >
-                List View
-              </button>
-              <button
-                onClick={() => setView("calendar")}
-                className={`px-4 py-2 ${
-                  view === "calendar"
-                    ? "bg-blue-100 text-blue-600"
-                    : "text-gray-600"
-                }`}
-              >
-                Calendar View
-              </button>
-            </div>
             <button
               onClick={() => {
                 setIsModalOpen(true);
@@ -837,7 +797,162 @@ export default function EventsPage() {
                 </div>
 
                 {/* Other fields similar to create modal */}
-                {/* ... */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Event Type
+                  </label>
+                  <select
+                    {...register("event_type", {
+                      required: "Event type is required",
+                    })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    {eventTypes.map((type) => (
+                      <option key={type.value} value={type.value}>
+                        {type.label}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.event_type && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.event_type.message as string}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Home/Away
+                  </label>
+                  <select
+                    {...register("home_away", {
+                      required: "Home/Away is required",
+                    })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="Home">Home</option>
+                    <option value="Away">Away</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Start Date & Time
+                  </label>
+                  <input
+                    type="datetime-local"
+                    {...register("start_date", {
+                      required: "Start date is required",
+                    })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.start_date && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.start_date.message as string}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Duration (minutes)
+                  </label>
+                  <input
+                    type="number"
+                    {...register("duration", {
+                      required: "Duration is required",
+                      min: {
+                        value: 1,
+                        message: "Duration must be at least 1 minute",
+                      },
+                    })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.duration && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.duration.message as string}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Arrive Time (minutes before)
+                  </label>
+                  <input
+                    type="number"
+                    {...register("arrive_time", {
+                      required: "Arrive time is required",
+                      min: {
+                        value: 0,
+                        message: "Arrive time cannot be negative",
+                      },
+                    })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.arrive_time && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.arrive_time.message as string}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    All Day Event
+                  </label>
+                  <select
+                    {...register("all_day")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Repeats
+                  </label>
+                  <select
+                    {...register("repeats")}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    {repeatOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    {...register("location", {
+                      required: "Location is required",
+                    })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  />
+                  {errors.location && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.location.message as string}
+                    </p>
+                  )}
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Notes
+                  </label>
+                  <textarea
+                    {...register("notes")}
+                    rows={3}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  ></textarea>
+                </div>
               </div>
 
               <div className="flex justify-between pt-4">

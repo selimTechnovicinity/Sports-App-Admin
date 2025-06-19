@@ -1,5 +1,5 @@
 "use client";
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import API from "@/lib/axios-client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -31,6 +31,10 @@ export default function UserProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -59,6 +63,33 @@ export default function UserProfilePage() {
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
+  };
+  const handlePasswordUpdate = async () => {
+    if (!newPassword || !confirmPassword) {
+      toast.error("Please fill in both fields.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await API.post("/auths/update-password", {
+        newPassword,
+        confirmPassword,
+      });
+      toast.success("Password updated successfully.");
+      setShowPasswordFields(false);
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err?.response?.data?.message || "Failed to update password.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onSubmit = async (data: UserData) => {
@@ -287,17 +318,44 @@ export default function UserProfilePage() {
                       <h3 className="font-medium">Password</h3>
                     </div>
                     {isEditing ? (
-                      <button
-                        type="button"
-                        className="text-blue-600 hover:text-blue-800 font-medium"
-                        onClick={() =>
-                          toast.info(
-                            "Password reset functionality would go here"
-                          )
-                        }
-                      >
-                        Change Password
-                      </button>
+                      <>
+                        {!showPasswordFields ? (
+                          <button
+                            type="button"
+                            className="text-blue-600 hover:text-blue-800 font-medium cursor-pointer"
+                            onClick={() => setShowPasswordFields(true)}
+                          >
+                            Change Password
+                          </button>
+                        ) : (
+                          <div className="mt-2 space-y-2">
+                            <input
+                              type="password"
+                              placeholder="New Password"
+                              className="w-full border border-gray-300 rounded-md px-4 py-2"
+                              value={newPassword}
+                              onChange={(e) => setNewPassword(e.target.value)}
+                            />
+                            <input
+                              type="password"
+                              placeholder="Confirm Password"
+                              className="w-full border border-gray-300 rounded-md px-4 py-2"
+                              value={confirmPassword}
+                              onChange={(e) =>
+                                setConfirmPassword(e.target.value)
+                              }
+                            />
+                            <button
+                              type="button"
+                              className="bg-blue-950 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                              onClick={handlePasswordUpdate}
+                              disabled={loading}
+                            >
+                              {loading ? "Updating..." : "Update Password"}
+                            </button>
+                          </div>
+                        )}
+                      </>
                     ) : (
                       <p className="text-gray-500">********</p>
                     )}
@@ -312,6 +370,7 @@ export default function UserProfilePage() {
                     onClick={() => {
                       setIsEditing(false);
                       setImagePreview(null);
+                      setShowPasswordFields(false);
                       if (user) {
                         reset(user);
                       }

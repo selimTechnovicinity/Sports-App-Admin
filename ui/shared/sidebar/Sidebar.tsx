@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BiSolidDashboard } from "react-icons/bi";
 import { CiTextAlignJustify } from "react-icons/ci";
-import { FaClipboardQuestion } from "react-icons/fa6";
+import { FaClipboardQuestion, FaUserTie } from "react-icons/fa6";
 import { FiMenu } from "react-icons/fi";
 import { GiPlayerNext } from "react-icons/gi";
 import { GrGroup } from "react-icons/gr";
@@ -13,6 +13,8 @@ import { IoSettings } from "react-icons/io5";
 import { MdPrivacyTip, MdSportsBasketball } from "react-icons/md";
 import { RiLogoutBoxRLine, RiUserSettingsLine } from "react-icons/ri";
 import { SiNintendogamecube } from "react-icons/si";
+import { RiCalendarEventFill } from "react-icons/ri";
+import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { TbEdit } from "react-icons/tb";
 import { toast } from "react-toastify";
 
@@ -154,7 +156,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                     : "hover:bg-blue-700"
                 }`}
               >
-                <GrGroup size={20} />
+                <AiOutlineUsergroupAdd size={20}/>
                 <span>Team Types</span>
               </Link>
             </li>
@@ -184,26 +186,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                     : "hover:bg-blue-700"
                 }`}
               >
-                <GrGroup size={20} />
+                <RiCalendarEventFill size={20}/>
                 <span>Events</span>
               </Link>
             </li>
 
-            {/* <li>
-              <Link
-                href="/users"
-                className={`flex items-center gap-3 p-2 rounded ${
-                  isActive("/users") ||
-                  isActive("/users/") ||
-                  pathname.startsWith("/users")
-                    ? "bg-blue-700"
-                    : "hover:bg-blue-700"
-                }`}
-              >
-                <FiUser size={20} />
-                <span>Users</span>
-              </Link>
-            </li> */}
             <li>
               <Link
                 href="/admin-profile"
@@ -213,7 +200,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                     : "hover:bg-blue-700"
                 }`}
               >
-                <TbEdit size={20} />
+                <FaUserTie size={20} />
                 <span>Admin Profile</span>
               </Link>
             </li>
