@@ -180,21 +180,21 @@ export const getContactsById = async (id: string) => {
 //forgot password
 
 export const forgetPassword = async (email: { email: string }) => {
-  const res = await API.post(`/auth/forget-password`, email);
+  const res = await API.post(`/auths/forget-password`, email);
 
   const result = res.data;
   return result;
 };
 
 export const submitOTP = async (otpData: { otp: string; email: string }) => {
-  const res = await API.post(`/auth/forget-password/verify-otp`, otpData);
+  const res = await API.post(`/auths/forget-password/verify-otp`, otpData);
 
   const result = res.data;
   return result;
 };
 
 export const resetPassword = async (formData: TResetPasswordData) => {
-  const res = await API.post(`/auth/reset-password`, formData);
+  const res = await API.post(`/auths/reset-password`, formData);
   const result = res.data;
 
   return result;

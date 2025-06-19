@@ -158,7 +158,7 @@ export default function UsersPage() {
   const handleDelete = async (id: string) => {
     try {
       await API.patch(`/users/${id}`);
-      toast.success("User deleted successfully");
+      toast.success("User status updated successfully");
       fetchUsers();
     } catch (error) {
       toast.error(error as string | "Failed to delete user");
@@ -494,6 +494,7 @@ export default function UsersPage() {
           isOpen={isEditing}
           onClose={() => {
             setIsEditing(false);
+            setImagePreview(null);
           }}
           title={isEditing ? "Edit User" : "User Details"}
           size="lg"
@@ -659,6 +660,7 @@ export default function UsersPage() {
                     type="button"
                     onClick={() => {
                       setIsEditing(false);
+                      setImagePreview(null);
                     }}
                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
                   >

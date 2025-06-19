@@ -1,5 +1,5 @@
 "use client";
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import API from "@/lib/axios-client";
 import DeleteButton from "@/ui/Button/DeleteButton";
 import AddModal from "@/ui/Modal/AddModal";
@@ -12,6 +12,7 @@ import {
   FiChevronsLeft,
   FiChevronsRight,
 } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 interface SeasonType {
   _id: string;
@@ -71,8 +72,9 @@ export default function SeasonTypesPage() {
     try {
       await API.delete(`/season-types/${id}`);
       fetchSeasonTypes();
+      toast.success("Season type deleted successfully");
     } catch (err) {
-      console.error("Delete error:", err);
+      toast.error(err as string | "Failed to delete season type");
     }
   };
 
@@ -84,19 +86,24 @@ export default function SeasonTypesPage() {
             "Content-Type": "multipart/form-data",
           },
         });
+        toast.success("Season type updated successfully!");
       } else {
         await API.post(`/season-types`, formValue, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+        toast.success("Season type created successfully!");
       }
+
       setIsModalOpen(false);
       setFormValue({ title: "", image: "" });
       setEditingId(null);
       fetchSeasonTypes();
-    } catch (err) {
-      console.error("Save error:", err);
+    } catch (err: any) {
+      toast.error(
+        err?.response?.data?.message || "Failed to save season type."
+      );
     }
   };
 

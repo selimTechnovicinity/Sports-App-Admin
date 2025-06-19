@@ -12,6 +12,7 @@ import {
   FiChevronsLeft,
   FiChevronsRight,
 } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 interface GameType {
   _id: string;
@@ -70,9 +71,10 @@ export default function GameTypesPage() {
   const handleDelete = async (id: string) => {
     try {
       await API.delete(`/game-types/${id}`);
+      toast.success("Game type deleted successfully");
       fetchGameTypes();
     } catch (err) {
-      console.error("Delete error:", err);
+      toast.error(err as string | "Failed to delete game type");
     }
   };
 
@@ -84,19 +86,21 @@ export default function GameTypesPage() {
             "Content-Type": "multipart/form-data",
           },
         });
+        toast.success("Game type updated successfully!");
       } else {
         await API.post(`/game-types`, formValue, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+        toast.success("Game type created successfully!");
       }
       setIsModalOpen(false);
       setFormValue({ title: "", image: "" });
       setEditingId(null);
       fetchGameTypes();
     } catch (err) {
-      console.error("Save error:", err);
+      toast.error(err as string | "Failed");
     }
   };
 

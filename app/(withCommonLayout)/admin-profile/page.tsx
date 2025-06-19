@@ -311,6 +311,7 @@ export default function UserProfilePage() {
                     type="button"
                     onClick={() => {
                       setIsEditing(false);
+                      setImagePreview(null);
                       if (user) {
                         reset(user);
                       }

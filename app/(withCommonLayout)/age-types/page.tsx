@@ -12,6 +12,7 @@ import {
   FiChevronsLeft,
   FiChevronsRight,
 } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 interface AgeType {
   _id: string;
@@ -70,9 +71,10 @@ export default function AgeTypesPage() {
   const handleDelete = async (id: string) => {
     try {
       await API.delete(`/age-types/${id}`);
+      toast.success("Age type deleted successfully");
       fetchAgeTypes();
     } catch (err) {
-      console.error("Delete error:", err);
+      toast.error(err as string | "Failed to delete age type");
     }
   };
 
@@ -84,12 +86,14 @@ export default function AgeTypesPage() {
             "Content-Type": "multipart/form-data",
           },
         });
+        toast.success("Age type updated successfully!");
       } else {
         await API.post(`/age-types`, formValue, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+        toast.success("Age type created successfully!");
       }
       setIsModalOpen(false);
       setFormValue({ title: "", image: "" });

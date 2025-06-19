@@ -12,6 +12,7 @@ import {
   FiChevronsLeft,
   FiChevronsRight,
 } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 interface TeamType {
   _id: string;
@@ -70,9 +71,10 @@ export default function TeamTypesPage() {
   const handleDelete = async (id: string) => {
     try {
       await API.delete(`/team-types/${id}`);
+      toast.success("Team type deleted successfully");
       fetchTeamTypes();
     } catch (err) {
-      console.error("Delete error:", err);
+      toast.error(err as string | "Failed to delete team type");
     }
   };
 
@@ -84,19 +86,21 @@ export default function TeamTypesPage() {
             "Content-Type": "multipart/form-data",
           },
         });
+        toast.success("Team type updated successfully!");
       } else {
         await API.post(`/team-types`, formValue, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+        toast.success("Team type created successfully!");
       }
       setIsModalOpen(false);
       setFormValue({ title: "", image: "" });
       setEditingId(null);
       fetchTeamTypes();
     } catch (err) {
-      console.error("Save error:", err);
+      toast.error((err as string) || "Failed to save team type.");
     }
   };
 

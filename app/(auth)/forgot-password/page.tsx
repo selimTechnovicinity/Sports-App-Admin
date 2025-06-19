@@ -7,6 +7,7 @@ import { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState<string>("");
@@ -14,10 +15,11 @@ const ForgotPassword = () => {
   const router = useRouter();
 
   const forgotPasswordMutation = useMutation({
-    mutationFn: () => API.post("/auth/forget-password", { email }),
+    mutationFn: () => API.post("/auths/forget-password", { email }),
     onSuccess: (res) => {
       if (res?.data.success) {  
         setLocalStorage("email", email);
+        toast.success(res?.data?.message || "OTP sent successfully!");
         router.push("/forgot-password/verify");
       }
     },

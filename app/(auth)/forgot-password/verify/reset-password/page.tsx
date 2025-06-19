@@ -4,21 +4,24 @@ import { getLocalStorage } from "@/utils/local-storage";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 
 export type TResetPasswordData = {
   email: string;
   password: string;
   confirmPassword: string;
+  otp : string;
 };
 
 const ForgotPassword = () => {
   const router = useRouter();
   const email = getLocalStorage("email");
+  const otp = getLocalStorage("otp");
   const [formData, setFormData] = useState<TResetPasswordData>({
     email: "",
     password: "",
     confirmPassword: "",
+    otp: "",
   });
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,6 +49,7 @@ const ForgotPassword = () => {
         router.push("/forgot-password");
       }
       formData.email = email as string;
+      formData.otp = otp as string;
       const res = await resetPassword(formData);
       if (res?.success) {
         toast.success(res?.message);

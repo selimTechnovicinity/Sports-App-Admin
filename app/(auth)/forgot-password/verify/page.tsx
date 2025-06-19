@@ -8,7 +8,7 @@ import { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 
 const RESEND_OTP_DELAY = 30;
 
@@ -31,14 +31,14 @@ const SubmitOTP = () => {
   // Submit OTP mutation
   const submitOTPMutation = useMutation({
     mutationFn: () =>
-      API.post(`/auth/forget-password/verify-otp`, {
+      API.post(`/auths/reset-password/verify`, {
         email: email as string,
         otp,
       }),
     onSuccess: (res) => {
       if (res?.data.success) {
         toast.success(res.data.message);
-        setLocalStorage("OTP", otp);
+        setLocalStorage("otp", otp);
         router.push("/forgot-password/verify/reset-password");
       }
     },
@@ -55,7 +55,7 @@ const SubmitOTP = () => {
         router.push("/forgot-password");
         return;
       }
-      return forgetPassword({ email });
+      return await forgetPassword({ email });
     },
     onSuccess: (res) => {
       toast.success(res.message);

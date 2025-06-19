@@ -14,7 +14,7 @@ import { MdPrivacyTip, MdSportsBasketball } from "react-icons/md";
 import { RiLogoutBoxRLine, RiUserSettingsLine } from "react-icons/ri";
 import { SiNintendogamecube } from "react-icons/si";
 import { TbEdit } from "react-icons/tb";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 
 interface SidebarProps {
   isOpen: boolean;
