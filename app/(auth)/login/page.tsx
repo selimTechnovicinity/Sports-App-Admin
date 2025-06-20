@@ -1,6 +1,7 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { loginMutationFn } from "@/lib/api";
+import { minutesToDays } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { Loader2 } from "lucide-react";
@@ -25,8 +26,16 @@ const Login = () => {
     onSuccess: (res) => {
       if (res.data.data.user.role === "Admin") {
         console.log(res?.data);
-        Cookies.set("accessToken", res?.data?.data?.accessToken);
-        Cookies.set("refreshToken", res?.data?.data?.refreshToken);
+        Cookies.set("accessToken", res?.data?.data?.accessToken, {
+          expires: minutesToDays(
+            Number(process.env.NEXT_PUBLIC_ACCESS_TOKEN_EXPIRES)
+          ),
+        });
+        Cookies.set("refreshToken", res?.data?.data?.refreshToken, {
+          expires: minutesToDays(
+            Number(process.env.NEXT_PUBLIC_REFRESH_TOKEN_EXPIRES)
+          ),
+        });
         toast.success(res.data.message);
         router.push("/dashboard");
       } else {

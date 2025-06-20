@@ -8,3 +8,5 @@ export function cn(...inputs: ClassValue[]) {
 export function cnClasses(...classes: (string | undefined | null | false)[]) {
   return classes.filter(Boolean).join(' ');
 }
+
+export const minutesToDays = (minutes: number) => minutes / (60 * 24);
